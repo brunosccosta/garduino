@@ -1,0 +1,1 @@
+curl -i -XPOST 'http://192.168.2.31:8086/write?db=planta' --data-binary 'temperatura,local=tenda1 value=42.2'
