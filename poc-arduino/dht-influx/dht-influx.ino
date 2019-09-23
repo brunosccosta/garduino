@@ -87,7 +87,7 @@ boolean setupWifi() {
   sendDataToWifi("AT+CWMODE=1"); // configure as client
   Serial.println("Configuring client-mode");
 
-  if (sendDataToWifiWithRetry("AT+CWJAP=\"Meow\",\"2208Bobgigi\"", "OK", 2)) {
+  if (sendDataToWifiWithRetry("AT+CWJAP=\"Meow\",\"<PASSHERE>\"", "OK", 2)) {
     Serial.println("Connected to SSID");
   }else {
     Serial.println("Can't connect to SSID");
