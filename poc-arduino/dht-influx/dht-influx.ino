@@ -16,8 +16,10 @@ int pinDHT11 = 7;
 SimpleDHT11 dht11(pinDHT11);
 
 // Signals
-int temperature;
-int humidity;
+typedef struct {
+  int temperature;
+  int humidity;
+} Measures;
 
 void setup()
 {
@@ -43,13 +45,15 @@ void setup()
 
 void loop()
 {
-  readFromDHT11(&temperature, &humidity);
+  Measures m;
+
+  readFromDHT11(&(m.temperature), &(m.humidity));
   Serial.println("[Signals] ");
-  Serial.println("\tTemperature: " + String(temperature));
-  Serial.println("\tHumidity: " + String(humidity));
+  Serial.println("\tTemperature: " + String(m.temperature));
+  Serial.println("\tHumidity: " + String(m.humidity));
   Serial.println();
 
-  sendTemperatureToInflux(temperature);
+  sendMeasurementToInflux(m);
   delay(10000);
 }
 
@@ -62,8 +66,11 @@ void readFromDHT11(int* temperature, int* humidity) {
   return;
 }
 
-void sendTemperatureToInflux(int temperature) {
-  String strData = "temperatura,local=tenda1 value="+ String(temperature);
+void sendMeasurementToInflux(Measures &measure) {
+  String strData;
+  
+  strData += "temperature,local=tenda1 value=" + String(measure.temperature) + "\n";
+  strData += "humidity,local=tenda1 value=" + String(measure.humidity);
   sendDataToInflux(strData);
 }
 
